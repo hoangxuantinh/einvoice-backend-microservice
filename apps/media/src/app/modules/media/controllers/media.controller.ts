@@ -7,9 +7,10 @@ import { TCP_REQUEST_MESSAGE } from '@common/constants/enum/tcp-request-message.
 import { RequestParams } from '@common/decorators/request-param.decorator';
 import { MediaService } from '../services/media.service';
 import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
+import { TcpServerTracingInterceptor } from '@common/interceptors/tracing-server.interceptor';
 
 @Controller()
-@UseInterceptors(TcpLoggingInterceptor)
+@UseInterceptors(TcpLoggingInterceptor, TcpServerTracingInterceptor)
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 

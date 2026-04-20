@@ -26,10 +26,9 @@ export class InvoiceController {
   async sendById(
     @RequestParams() params: SendInvoiceTcpReq,
     @ProcessId() processID: string,
-  ): Promise<Response<{ fileUrl: string; paymentLink: string }> | Response<string>> {
+  ): Promise<Response<{ fileUrl: string; paymentLink: string }>> {
     const data = await this.invoiceService.sendById(params, processID);
-    return Response.success<string>(HTTP_MESSAGE.OK);
-    // return Response.success<{ fileUrl: string; paymentLink: string }>(data);
+    return Response.success<{ fileUrl: string; paymentLink: string }>(data);
   }
 
   @MessagePattern(TCP_REQUEST_MESSAGE.INVOICE.UPDATE_INVOICE_PAID)
@@ -41,6 +40,13 @@ export class InvoiceController {
   @MessagePattern(TCP_REQUEST_MESSAGE.INVOICE.GET_BY_ID)
   async getInvoiceById(@RequestParams() invoiceId: string) {
     const invoice = await this.invoiceService.getById(invoiceId);
+    if (!invoice) {
+      return new Response<InvoiceTcpResponse>({
+        code: HTTP_MESSAGE.NOT_FOUND,
+        statusCode: 404,
+        error: `Invoice with id ${invoiceId} not found`,
+      });
+    }
     return Response.success<InvoiceTcpResponse>(invoice);
   }
 }

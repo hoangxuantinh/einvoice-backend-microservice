@@ -34,7 +34,7 @@ export class InvoiceService {
 
     const invoice = await this.invoiceRepository.getById(invoiceId);
 
-    if (invoice.status !== INVOICE_STATUS.CREATED) {
+    if (invoice?.status !== INVOICE_STATUS.CREATED) {
       throw new BadRequestException(ERROR_CODE.INVOICE_CAN_NOT_BE_SENT);
     }
 
@@ -52,10 +52,15 @@ export class InvoiceService {
 
       this.kafkaClient.emit<InvoiceSentPayload>('invoice-sent', {
         id: invoiceId,
-        paymentLink: context.paymentLink,
+        paymentLink: context.paymentLink ?? '',
       });
+
+      return {
+        fileUrl: context.fileUrl ?? '',
+        paymentLink: context.paymentLink ?? '',
+      };
     } catch (error) {
-      this.logger.error(`Failed to send invoice ${invoiceId}: ${error.message}`);
+      this.logger.error(`Failed to send invoice ${invoiceId}: ${error}`);
       throw error;
     }
   }

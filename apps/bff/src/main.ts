@@ -28,8 +28,8 @@ async function bootstrap() {
     });
 
     const config = new DocumentBuilder()
-      .setTitle('Einvoice-bff API')
-      .setDescription('The Einvoice-bff API description')
+      .setTitle('Invoice-bff API')
+      .setDescription('The Invoice-bff API description')
       .setVersion('1.0.0')
       .addBearerAuth({
         description: 'Default JWT Authorization',

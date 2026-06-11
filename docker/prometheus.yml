@@ -1,5 +1,5 @@
 global:
-  scrape_interval: 15s # Chu kỳ lấy dữ liệu (15 giây 1 lần)
+  scrape_interval: 15s
 
 scrape_configs:
   - job_name: 'nestjs-app'
